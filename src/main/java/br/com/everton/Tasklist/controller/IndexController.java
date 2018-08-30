@@ -1,9 +1,10 @@
 package br.com.everton.Tasklist.controller;
 
 import br.com.everton.Tasklist.model.Tarefa;
-import br.com.everton.Tasklist.model.Usuario;
-import java.util.ArrayList;
-import java.util.List;
+import br.com.everton.Tasklist.service.TarefaService;
+import br.com.everton.Tasklist.util.Util;
+import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,58 +21,34 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping({"/", "/tarefa"})
 public class IndexController {
    
-    
-    private List<Tarefa> listaTarefa = new ArrayList();
+    @Autowired TarefaService service;
+//    private List<Tarefa> listaTarefa = new ArrayList();
     
     
     @GetMapping
-    public ModelAndView home() {
+    public ModelAndView home(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("tarefa/index");
-        modelAndView.addObject("tarefa", listaTarefa);
+        modelAndView.addObject("tarefa", service.getAll(Util.getUsuarioBySession(session)));
         return modelAndView;
     } 
     
     
     @GetMapping("/novo")
-    public ModelAndView novoUsuario() {
+    public ModelAndView novo() {
         ModelAndView modelAndView = new ModelAndView("tarefa/form");
         modelAndView.addObject("tarefa", new Tarefa());
         return modelAndView;
     }
     
     @PostMapping("/gravar")
-    public ModelAndView gravarUsuario(Tarefa tarefa) {
-        
-        if (tarefa.getId() == null) {
-            tarefa.setId(listaTarefa.size() + 1L);
-            listaTarefa.add(tarefa);
-        } else {
-            for (int i = 0; i < listaTarefa.size(); i++) {
-                Tarefa t = listaTarefa.get(i);
-                if (tarefa.getId().equals(t.getId())) {
-                    listaTarefa.set(i, tarefa);
-                    break;
-                }
-            }
-        }
-        
-        
-        
+    public ModelAndView gravar(Tarefa tarefa, HttpSession session) {
+        service.save(tarefa, Util.getUsuarioBySession(session));
         return new ModelAndView("redirect:/tarefa");
     }  
     
     @GetMapping("/editar/{id}")
-    public ModelAndView novoUsuario(@PathVariable Long id) {
-        
-        Tarefa tarefaAlterar = null;
-        
-        for (Tarefa tarefa : listaTarefa) {
-            if (id.equals(tarefa.getId())) {
-                tarefaAlterar = tarefa;
-                break;
-            }
-        }
-        
+    public ModelAndView editar(@PathVariable Long id, HttpSession session) {
+        Tarefa tarefaAlterar = service.getById(id, Util.getUsuarioBySession(session));
         
         if (tarefaAlterar != null) {
             ModelAndView modelAndView = new ModelAndView("tarefa/form");
@@ -80,6 +57,17 @@ public class IndexController {
         } else {
             return new ModelAndView("redirect:/tarefa/novo");
         }
+    }
+    
+    @PostMapping("/excluir")
+    public ModelAndView excluir(Long id, HttpSession session) {
+        Tarefa tarefa = service.getById(id, Util.getUsuarioBySession(session));
+
+        if (tarefa != null) {
+            service.delete(tarefa);
+        }
+        
+        return new ModelAndView("redirect:/tarefa");
     }
 }
 

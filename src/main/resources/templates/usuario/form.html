@@ -31,12 +31,12 @@
 
             <form method="POST" th:object="${usuario}" th:action="@{/usuario/gravar}">
                 
-                <input type="hidden" th:field="*{id}"/>
+                <!--<input type="hidden" th:field="*{id}"/>-->
                 
                 <div class="row">
                     <div class="col-sm-6">
                         <label>Usuário</label>
-                        <input class="form-control" th:field="*{usuario}"/>
+                        <input type="text" class="form-control" th:field="*{nome}"/>
                     </div>
                     <div class="col-sm-6">
                         <label>Senha</label>

@@ -12,7 +12,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Tasklist</a>
+            <a class="navbar-brand" th:href="@{/}">Tasklist</a>
 
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -20,19 +20,21 @@
             <div class="collapse navbar-collapse" id="navbarText">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" th:href="@{/}">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/usuario}">Usuarios</a>
+                        <a class="nav-link" th:href="@{/}">Home</a>
                     </li>
                 </ul>
+                <span class="navbar-text">
+                    <a class="nav-link" th:href="@{/login/logout}">Sair</a>
+                </span>
             </div>
         </nav>
         
         
         <div class="container">
             
-            <a th:href="@{/tarefa/novo}">Nova Tarefa</a>
+            <div class="row">
+                <a class="btn btn-link" th:href="@{/tarefa/novo}">Nova Tarefa</a>
+            </div>
 
             <div class="table-responsive">
                 <table class="table table-hover table-striped">
@@ -54,11 +56,13 @@
                                    title="Editar" rel="tooltip" data-placement="top">
                                     Editar
                                 </a>
-                                <a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
-                                   th:attr="data-codigo=${tarefa.id}, data-descricao=${tarefa.titulo}"
-                                   title="Excluir" rel="tooltip" data-placement="top">
-                                    Excluir
-                                </a>
+                                
+                                <form th:action="@{/tarefa/excluir}" method="POST">
+                                    <input type="hidden" name="id" th:value="${tarefa.id}"/>
+                                    <button class="btn btn-link btn-xs" title="Excluir" rel="tooltip" data-placement="top" type="submit">
+                                         Excluir
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     </tbody>

@@ -45,7 +45,7 @@
                     <tbody>
                         <tr th:each="usuario : ${usuarios}">
                             <td th:text="${usuario.id}"></td>
-                            <td th:text="${usuario.usuario}"></td>
+                            <td th:text="${usuario.nome}"></td>
                             <td th:text="${usuario.senha}"></td>
                             <td class="text-right">
                                 <a class="btn btn-link btn-xs" th:href="@{/usuario/editar/{id}(id=${usuario.id})}" 
@@ -53,7 +53,7 @@
                                     Editar
                                 </a>
                                 <a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExclusaoModal"
-                                   th:attr="data-codigo=${usuario.id}, data-descricao=${usuario.usuario}"
+                                   th:attr="data-codigo=${usuario.id}, data-descricao=${usuario.nome}"
                                    title="Excluir" rel="tooltip" data-placement="top">
                                     Excluir
                                 </a>

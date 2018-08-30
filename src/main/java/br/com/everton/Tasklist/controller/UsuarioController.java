@@ -1,10 +1,13 @@
 package br.com.everton.Tasklist.controller;
 
 import br.com.everton.Tasklist.model.Usuario;
+import br.com.everton.Tasklist.service.UsuarioService;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,13 +25,15 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/usuario")
 public class UsuarioController {
     
-    private List<Usuario> listaUsuario = new ArrayList();
+//    private List<Usuario> listaUsuario = new ArrayList();
+    
+    @Autowired private UsuarioService service;
     
     
     @GetMapping
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView("usuario/usuario");
-        modelAndView.addObject("usuarios", listaUsuario);
+        modelAndView.addObject("usuarios", service.listarTodosUsuarios());
         
         return modelAndView;
     } 
@@ -44,33 +49,35 @@ public class UsuarioController {
     @PostMapping("/gravar")
     public ModelAndView gravarUsuario(Usuario usuario) {
         
-        usuario.setId(listaUsuario.size() + 1L);
+        service.criarUsuario(usuario);
         
-        listaUsuario.add(usuario);
+//        usuario.setId(listaUsuario.size() + 1L);
+//        
+//        listaUsuario.add(usuario);
         return new ModelAndView("redirect:/usuario");
     }  
     
-    @GetMapping("/editar/{id}")
-    public ModelAndView novoUsuario(@PathVariable Long id) {
-        
-        Usuario usuarioAlterar = null;
-        
-        for (Usuario usuario : listaUsuario) {
-            if (id.equals(usuario.getId())) {
-                usuarioAlterar = usuario;
-                break;
-            }
-        }
-        
-        
-        if (usuarioAlterar != null) {
-            ModelAndView modelAndView = new ModelAndView("usuario/form");
-            modelAndView.addObject("usuario", usuarioAlterar);
-            return modelAndView;
-        } else {
-            return new ModelAndView("redirect:/usuario/novo");
-        }
-    }
+//    @GetMapping("/editar/{id}")
+//    public ModelAndView editar(@PathVariable Long id) {
+//        
+//        Usuario usuarioAlterar = null;
+////        
+////        for (Usuario usuario : listaUsuario) {
+////            if (id.equals(usuario.getId())) {
+////                usuarioAlterar = usuario;
+////                break;
+////            }
+////        }
+//        
+//        
+//        if (usuarioAlterar != null) {
+//            ModelAndView modelAndView = new ModelAndView("usuario/form");
+//            modelAndView.addObject("usuario", usuarioAlterar);
+//            return modelAndView;
+//        } else {
+//            return new ModelAndView("redirect:/usuario/novo");
+//        }
+//    }
     
     
 //    @GetMapping("/all")
