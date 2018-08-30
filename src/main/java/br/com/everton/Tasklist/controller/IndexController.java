@@ -22,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class IndexController {
    
     @Autowired TarefaService service;
-//    private List<Tarefa> listaTarefa = new ArrayList();
     
     
     @GetMapping

@@ -15,5 +15,4 @@ import org.springframework.stereotype.Repository;
 public interface TarefaRepository extends JpaRepository<Tarefa, Long>{
     public List<Tarefa> findAllByUsuario(Usuario usuario);
     public Tarefa findByUsuarioAndId(Usuario usuario, Long id);
-    
 }

@@ -11,7 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
-//    public List<Usuario> findByNomeStartingWith(String nome);
-    
     public Usuario findByNomeAndSenha(String name, String senha);
 }
